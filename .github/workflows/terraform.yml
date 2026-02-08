@@ -47,10 +47,10 @@ jobs:
         working-directory: envs/dev
         run: terraform plan
 
-      # - name: Terraform Apply
-      #   if: startsWith(github.ref_name, 'feature/')
-      #   working-directory: envs/dev
-      #   run: terraform apply -auto-approve 
+      - name: Terraform Apply
+        if: startsWith(github.ref_name, 'feature/')
+        working-directory: envs/dev
+        run: terraform apply -auto-approve 
         
       - name: Terraform Destroy
         working-directory: envs/dev
