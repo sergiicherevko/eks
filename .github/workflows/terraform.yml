@@ -1,6 +1,13 @@
 name: terraform-dev
 
 on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "feature/**"
+      - "main"
+
+on:
   push:
     branches:
       - "feature/**"
