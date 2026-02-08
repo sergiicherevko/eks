@@ -1,17 +1,21 @@
 name: terraform-dev
 
 on:
+  push:
+    branches:
+      - "feature/**"
+      - "main"
   workflow_dispatch:
-  push:
-    branches:
-      - "feature/**"
-      - "main"
-
-on:
-  push:
-    branches:
-      - "feature/**"
-      - "main"
+    inputs:
+      action:
+        description: "Choose what to run"
+        required: true
+        default: "plan"
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
 
 permissions:
   id-token: write
@@ -44,14 +48,16 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.action == 'plan')
         working-directory: envs/dev
         run: terraform plan
 
       - name: Terraform Apply
-        if: startsWith(github.ref_name, 'feature/')
+        if: (github.event_name == 'push' && startsWith(github.ref_name, 'feature/')) || (github.event_name == 'workflow_dispatch' && inputs.action == 'apply')
         working-directory: envs/dev
-        run: terraform apply -auto-approve 
-        
+        run: terraform apply -auto-approve
+
       - name: Terraform Destroy
+        if: github.event_name == 'workflow_dispatch' && inputs.action == 'destroy'
         working-directory: envs/dev
         run: terraform destroy -auto-approve
