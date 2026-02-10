@@ -14,3 +14,12 @@ variable "public_subnet_ids" {
 variable "vpc_cidr" {
   type = string
 }
+
+variable "desired_capacity" { type = number }
+variable "min_size" { type = number }
+variable "max_size" { type = number }
+
+variable "instance_types" {
+  type    = list(string)
+  default = ["t3.medium", "t3a.medium"]
+}
