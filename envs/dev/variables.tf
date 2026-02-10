@@ -22,3 +22,8 @@ variable "private_subnet_cidrs" {
   type    = list(string)
   default = ["10.60.48.0/20", "10.60.64.0/20", "10.60.80.0/20"]
 }
+
+variable "kubernetes_version" {
+  type    = string
+  default = "1.29"
+}
