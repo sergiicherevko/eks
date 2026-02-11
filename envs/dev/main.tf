@@ -48,7 +48,6 @@ module "eks" {
   instance_types = ["t3.medium", "t3a.medium"]
 
   admin_role_arns = [
-    "arn:aws:iam::ACCOUNT_ID:role/AWSReservedSSO_AdministratorAccess_XXXX",
-    "arn:aws:iam::ACCOUNT_ID:role/GitHubActionsTerraformIAMrole"
+    var.gha_terraform_role_arn
   ]
 }

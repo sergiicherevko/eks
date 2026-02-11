@@ -27,3 +27,7 @@ variable "kubernetes_version" {
   type    = string
   default = "1.29"
 }
+
+variable "gha_terraform_role_arn" {
+  type = string
+}
