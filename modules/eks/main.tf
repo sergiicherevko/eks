@@ -212,3 +212,40 @@ resource "aws_autoscaling_group" "nodes" {
   health_check_type         = "EC2"
   health_check_grace_period = 300
 }
+
+resource "aws_eks_access_entry" "admins" {
+  for_each     = toset(var.admin_role_arns)
+  cluster_name = aws_eks_cluster.this.name
+  principal_arn = each.value
+}
+
+resource "aws_eks_access_policy_association" "admins" {
+  for_each     = toset(var.admin_role_arns)
+  cluster_name = aws_eks_cluster.this.name
+  principal_arn = each.value
+  policy_arn   = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+
+  access_scope {
+    type = "cluster"
+  }
+}
+
+resource "aws_eks_addon" "vpc_cni" {
+  cluster_name = aws_eks_cluster.this.name
+  addon_name   = "vpc-cni"
+}
+
+resource "aws_eks_addon" "coredns" {
+  cluster_name = aws_eks_cluster.this.name
+  addon_name   = "coredns"
+}
+
+resource "aws_eks_addon" "kube_proxy" {
+  cluster_name = aws_eks_cluster.this.name
+  addon_name   = "kube-proxy"
+}
+
+resource "aws_eks_addon" "ebs_csi" {
+  cluster_name = aws_eks_cluster.this.name
+  addon_name   = "aws-ebs-csi-driver"
+}
